@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="api/v1/task")
+@RequestMapping(path="api/task")
 public class TaskController {
 
     private final TaskService taskService;
@@ -16,9 +16,9 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping
-    public List<Task> findAll(){
-        return taskService.findAll();
+    @GetMapping("/user/{username}")
+    public List<Task> findAll(@PathVariable String username){
+        return taskService.findByUsername(username);
     }
 
     @GetMapping("/{id}")
@@ -26,18 +26,18 @@ public class TaskController {
         return taskService.findById(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> save(@RequestBody Task task){
-        return taskService.newTask(task);
+    @PostMapping("/user/{username}")
+    public ResponseEntity<Object> save(@RequestBody Task task, @PathVariable String username) {
+        return taskService.createTaskForUser(task, username);
     }
 
-    @PatchMapping
-    public ResponseEntity<Object> update(@RequestBody Task task){
-        return taskService.update(task);
+    @PatchMapping("/user/{username}")
+    public ResponseEntity<Object> update(@RequestBody Task task, @PathVariable String username){
+        return taskService.update(task, username);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> delete(@RequestBody Task task){
-        return taskService.deleteByName(task);
+    @DeleteMapping("/user/{username}")
+    public ResponseEntity<Object> delete(@RequestBody Task task, @PathVariable String username){
+        return taskService.deleteByName(task, username);
     }
 }

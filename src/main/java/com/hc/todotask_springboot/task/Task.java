@@ -1,36 +1,34 @@
 package com.hc.todotask_springboot.task;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.hc.todotask_springboot.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
 
-@Setter
-@Getter
 @Table
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
     private String title;
     private String description;
     private boolean done;
     private Instant createTime;
 
-    public Task(Long id, String title, String description, boolean done, Instant createTime) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.done = done;
-        this.createTime = createTime;
-    }
-
-    public Task() {
-
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
 
 }
